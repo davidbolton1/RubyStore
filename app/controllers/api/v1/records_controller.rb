@@ -2,11 +2,12 @@ module Api
   module V1
 
     class RecordsController < ApplicationController
+      before_action :authorize_access_request!
       before_action :set_record, only: [:show, :update, :destroy]
 
       # GET /records
       def index
-        @records = Record.all
+        @records = current_user.records.all
 
         render json: @records
       end
@@ -18,7 +19,7 @@ module Api
 
       # POST /records
       def create
-        @record = Record.new(record_params)
+        @record = current_user.records.build(record_params)
 
         if @record.save
           render json: @record, status: :created, location: @record
