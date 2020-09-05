@@ -81,7 +81,7 @@
 <script>
 export default {
   name: 'Records',
-  data() {
+  data () {
     return {
       artists: [],
       records: [],
@@ -90,7 +90,7 @@ export default {
       editedRecord: ''
     }
   },
-  created() {
+  created () {
     if (!localStorage.signedIn) {
       this.$router.replace('/')
     } else {
@@ -107,10 +107,10 @@ export default {
     }
   },
   methods: {
-    setError(error, text) {
+    setError (error, text) {
       this.error = (error.response && error.response.data && error.response.data.error) || text
     },
-    getArtist(record) {
+    getArtist (record) {
       const recordArtistValues = this.artists.filter(artist => artist.id === record.artist_id)
       let artist
       recordArtistValues.forEach(function (element) {
@@ -118,43 +118,43 @@ export default {
       })
       return artist
     },
-    addRecord() {
+    addRecord () {
       const value = this.newRecord
       if (!value) {
         return
       }
       this.$http.secured.post('/api/v1/records/', {
-          record: {
-            title: this.newRecord.title,
-            year: this.newRecord.year,
-            artist_id: this.newRecord.artist
-          }
-        })
+        record: {
+          title: this.newRecord.title,
+          year: this.newRecord.year,
+          artist_id: this.newRecord.artist
+        }
+      })
         .then(response => {
           this.records.push(response.data)
           this.newRecord = ''
         })
         .catch(error => this.setError(error, 'Cannot create record'))
     },
-    removeRecord(record) {
+    removeRecord (record) {
       this.$http.secured.delete(`/api/v1/records/${record.id}`)
         .then(response => {
           this.records.splice(this.records.indexOf(record), 1)
         })
         .catch(error => this.setError(error, 'Cannot delete record'))
     },
-    editRecord(record) {
+    editRecord (record) {
       this.editedRecord = record
     },
-    updateRecord(record) {
+    updateRecord (record) {
       this.editedRecord = ''
       this.$http.secured.patch(`/api/v1/records/${record.id}`, {
-          record: {
-            title: record.title,
-            year: record.year,
-            artist_id: record.artist
-          }
-        })
+        record: {
+          title: record.title,
+          year: record.year,
+          artist_id: record.artist
+        }
+      })
         .catch(error => this.setError(error, 'Cannot update record'))
     }
   }

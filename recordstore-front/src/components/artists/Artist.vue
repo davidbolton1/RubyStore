@@ -43,71 +43,71 @@
 
 <script>
 export default {
-  name: "Artists",
-  data() {
+  name: 'Artists',
+  data () {
     return {
       artists: [],
       newArtist: [],
-      error: "",
-      editedArtist: "",
-    };
+      error: '',
+      editedArtist: ''
+    }
   },
-  created() {
+  created () {
     if (!localStorage.signedIn) {
-      this.$router.replace("/");
+      this.$router.replace('/')
     } else {
       this.$http.secured
-        .get("/api/v1/artists")
+        .get('/api/v1/artists')
         .then((response) => {
-          this.artists = response.data;
+          this.artists = response.data
         })
-        .catch((error) => this.setError(error, "Something went wrong"));
+        .catch((error) => this.setError(error, 'Something went wrong'))
     }
   },
   methods: {
-    setError(error, text) {
+    setError (error, text) {
       this.error =
         (error.response && error.response.data && error.response.data.error) ||
-        text;
+        text
     },
-    addArtist() {
-      const value = this.newArtist;
+    addArtist () {
+      const value = this.newArtist
       if (!value) {
-        return;
+        return
       }
       this.$http.secured
-        .post("/api/v1/artists/", {
+        .post('/api/v1/artists/', {
           artist: {
-            name: this.newArtist.name,
-          },
+            name: this.newArtist.name
+          }
         })
         .then((response) => {
-          this.artists.push(response.data);
-          this.newArtist = "";
+          this.artists.push(response.data)
+          this.newArtist = ''
         })
-        .catch((error) => this.setError(error, "Cannot create artist"));
+        .catch((error) => this.setError(error, 'Cannot create artist'))
     },
-    removeArtist(artist) {
+    removeArtist (artist) {
       this.$http.secured
         .delete(`/api/v1/artists/${artist.id}`)
         .then((response) => {
-          this.artists.splice(this.artists.indexOf(artist), 1);
+          this.artists.splice(this.artists.indexOf(artist), 1)
         })
-        .catch((error) => this.setError(error, "Cannot delete artist"));
+        .catch((error) => this.setError(error, 'Cannot delete artist'))
     },
-    editArtist(artist) {
-      this.editedArtist = artist;
+    editArtist (artist) {
+      this.editedArtist = artist
     },
-    updateArtist(artist) {
-      this.editedArtist = "";
+    updateArtist (artist) {
+      this.editedArtist = ''
       this.$http.secured
         .patch(`/api/v1/artists/${artist.id}`, {
           artist: {
-            title: artist.name,
-          },
+            title: artist.name
+          }
         })
-        .catch((error) => this.setError(error, "Cannot update artist"));
-    },
-  },
-};
+        .catch((error) => this.setError(error, 'Cannot update artist'))
+    }
+  }
+}
 </script>

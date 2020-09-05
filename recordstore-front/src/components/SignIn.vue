@@ -26,29 +26,29 @@
 <script>
 export default {
   name: 'Signin',
-  data() {
+  data () {
     return {
       email: '',
       password: '',
       error: ''
     }
   },
-  created() {
+  created () {
     this.checkSignedIn()
   },
-  updated() {
+  updated () {
     this.checkSignedIn()
   },
   methods: {
-    signin() {
+    signin () {
       this.$http.plain.post('/signin', {
-          email: this.email,
-          password: this.password
-        })
+        email: this.email,
+        password: this.password
+      })
         .then(response => this.signinSuccessful(response))
         .catch(error => this.signinFailed(error))
     },
-    signinSuccessful(response) {
+    signinSuccessful (response) {
       if (!response.data.csrf) {
         this.signinFailed(response)
         return
@@ -58,12 +58,12 @@ export default {
       this.error = ''
       this.$router.replace('/records')
     },
-    signinFailed(error) {
+    signinFailed (error) {
       this.error = (error.response && error.response.data && error.response.data.error) || ''
       delete localStorage.csrf
       delete localStorage.signedIn
     },
-    checkSignedIn() {
+    checkSignedIn () {
       if (localStorage.signedIn) {
         this.$router.replace('/records')
       }
